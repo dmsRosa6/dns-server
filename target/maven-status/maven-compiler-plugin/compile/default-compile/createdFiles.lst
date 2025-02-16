@@ -1,0 +1,8 @@
+Main.class
+messages/DNSMessage.class
+messages/RecordPreamble.class
+messages/Record.class
+messages/DnsHeader.class
+messages/ResultCode.class
+BytePacketReader.class
+messages/Question.class
