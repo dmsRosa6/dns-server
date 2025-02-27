@@ -1,4 +1,4 @@
-package messages;
+package dmsrosa.dns_server.messages;
 
 public enum ResultCode {
     
@@ -23,5 +23,15 @@ public enum ResultCode {
 
     public String getDescription() {
         return description;
+    }
+
+    public static ResultCode fromCode(byte code){
+        for (ResultCode elem : ResultCode.values()) {
+            if (elem.getCode() == code ) {
+                return elem;
+            }
+        }
+
+        return NO_ERROR;
     }
 }

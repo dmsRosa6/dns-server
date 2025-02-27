@@ -1,8 +1,9 @@
-/home/dmsrosa/Desktop/dns-server/src/main/java/messages/Record.java
-/home/dmsrosa/Desktop/dns-server/src/main/java/messages/ResultCode.java
-/home/dmsrosa/Desktop/dns-server/src/main/java/messages/DnsHeader.java
-/home/dmsrosa/Desktop/dns-server/src/main/java/messages/DNSMessage.java
-/home/dmsrosa/Desktop/dns-server/src/main/java/messages/Question.java
-/home/dmsrosa/Desktop/dns-server/src/main/java/messages/RecordPreamble.java
-/home/dmsrosa/Desktop/dns-server/src/main/java/BytePacketReader.java
-/home/dmsrosa/Desktop/dns-server/src/main/java/Main.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/ResultCode.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/DnsHeader.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/DNSMessage.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/QueryType.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/Main.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/Question.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/BytePacketReader.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/Record.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/RecordPreamble.java

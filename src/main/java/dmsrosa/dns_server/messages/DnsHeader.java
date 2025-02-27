@@ -1,5 +1,7 @@
-package messages;
+package dmsrosa.dns_server.messages;
 
+
+import dmsrosa.dns_server.BytePacketReader;
 /**
  * Represents the header of a DNS protocol message as defined in RFC 1035.
  *
@@ -35,21 +37,40 @@ public class DnsHeader {
 
     // Fields
     private short packetID; // 16-bit identifier for the DNS packet
-    private boolean QR; // Query (false) or Response (true)
-    private byte OpCode; // 4-bit field (values 0-15) specifying the type of query
-    private boolean AA; // Authoritative Answer flag
-    private boolean TC; // Truncated flag (true if message was truncated)
+    
     private boolean RD; // Recursion Desired flag
-    private boolean RA; // Recursion Available flag
-    private byte Z; // 3-bit reserved field (should be 0); stored in a byte (only lower 3 bits are used)
+    private boolean TC; // Truncated flag (true if message was truncated)
+    private boolean AA; // Authoritative Answer flag
+    private byte OpCode; // 4-bit field (values 0-15) specifying the type of query
+    private boolean response;
+    
     private ResultCode RCODE; // 4-bit response code (values 0-15)
+    private boolean CD;
+    private boolean authed;
+    private boolean Z; // 3-bit reserved field (should be 0); stored in a byte (only lower 3 bits are used)
+    private boolean RA; // Recursion Available flag
+    
     private short QDCOUNT; // Number of entries in the question section
     private short ANCOUNT; // Number of resource records in the answer section
     private short NSCOUNT; // Number of name server records in the authority section
     private short ARCOUNT; // Number of resource records in the additional section
 
-    public DnsHeader(){
-        
+    public DnsHeader(short packetID, byte OpCode, boolean  AA, boolean  TC, boolean RD, boolean  RA, boolean Z, ResultCode RCODE, short  QDCOUNT, short  ANCOUNT, short  NSCOUNT, short  ARCOUNT, boolean  authed, boolean response, boolean CD){
+        this.packetID = packetID;
+        this.OpCode = OpCode;
+        this.AA = AA;
+        this.TC = TC;
+        this.RD = RD;
+        this.RA = RA;
+        this.Z = Z;
+        this.RCODE = RCODE;
+        this.QDCOUNT = QDCOUNT;
+        this.NSCOUNT = NSCOUNT;
+        this.ARCOUNT = ARCOUNT;
+        this.ANCOUNT = ANCOUNT;
+        this.authed = authed;
+        this.response = response;
+        this.CD = CD;
     }
 
     // Getters and Setters
@@ -78,8 +99,8 @@ public class DnsHeader {
         return RA;
     }
 
-    public int getZ() {
-        return Z & 0x07;
+    public boolean getZ() {
+        return Z;
     }
 
     public ResultCode getRCODE() {
@@ -102,11 +123,41 @@ public class DnsHeader {
         return ARCOUNT;
     }
 
+    public static DnsHeader read(BytePacketReader reader){
+        short id = (short) reader.read2Bytes();
+
+        short flags = (short) reader.read2Bytes();
+
+        byte a = (byte) (flags >> 8);
+        byte b = (byte) (flags % 0xFF);
+
+        boolean rd = ((a & (1 << 0)) > 0);
+        boolean tc = ((a & (1 << 1)) > 0);
+        boolean aa = (a & (1 << 2)) > 0;
+        byte opcode = (byte) ((a >> 3) & 0x0F);
+        boolean response = (a & (1 << 7)) > 0;
+
+        ResultCode rescode = ResultCode.fromCode((byte)(b & 0x0F));
+        boolean cd = (b & (1 << 4)) > 0;
+        boolean authed_data = (b & (1 << 5)) > 0;
+        boolean z = (b & (1 << 6)) > 0;
+        boolean ra = (b & (1 << 7)) > 0;
+        
+        short questions = (short) reader.read2Bytes();
+        short answers = (short) reader.read2Bytes();
+        short authoritative_entries = (short) reader.read2Bytes();
+        short resource_entries = (short) reader.read2Bytes();
+
+        return new DnsHeader(id, opcode, aa, tc, rd, ra, z, rescode, questions, answers, authoritative_entries,resource_entries, authed_data, response, cd);
+    }
+
     @Override
     public String toString() {
         return "Header{" +
                 "packetID=" + packetID +
-                ", QR=" + QR +
+                ", CD=" + CD +
+                ", response=" + response +
+                ", auhted=" + authed +
                 ", OpCode=" + getOpCode() +
                 ", AA=" + AA +
                 ", TC=" + TC +
