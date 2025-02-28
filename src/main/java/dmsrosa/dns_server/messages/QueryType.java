@@ -1,9 +1,6 @@
 package dmsrosa.dns_server.messages;
 
-public enum QueryType {
-    UNKNOWN(-1),
-    A(1);
-
+public abstract class QueryType {
     private final int value;
 
     private QueryType(int value){
@@ -16,9 +13,22 @@ public enum QueryType {
 
     public static QueryType fromNum(int n){
         if(n == 1){
-            return A;
+            return new AQueryType();
         }
 
-        return UNKNOWN;
+        return new UnknownQueryType(n);
+    }
+
+    public static class AQueryType extends QueryType{
+
+        private AQueryType() {
+            super(1);
+        }
+    }
+    public static class UnknownQueryType extends QueryType{
+
+        private UnknownQueryType(int value) {
+            super(value);
+        }
     }
 }

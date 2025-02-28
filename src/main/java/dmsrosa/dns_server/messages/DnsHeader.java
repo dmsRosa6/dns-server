@@ -55,7 +55,7 @@ public class DnsHeader {
     private short NSCOUNT; // Number of name server records in the authority section
     private short ARCOUNT; // Number of resource records in the additional section
 
-    public DnsHeader(short packetID, byte OpCode, boolean  AA, boolean  TC, boolean RD, boolean  RA, boolean Z, ResultCode RCODE, short  QDCOUNT, short  ANCOUNT, short  NSCOUNT, short  ARCOUNT, boolean  authed, boolean response, boolean CD){
+    private DnsHeader(short packetID, byte OpCode, boolean  AA, boolean  TC, boolean RD, boolean  RA, boolean Z, ResultCode RCODE, short  QDCOUNT, short  ANCOUNT, short  NSCOUNT, short  ARCOUNT, boolean  authed, boolean response, boolean CD){
         this.packetID = packetID;
         this.OpCode = OpCode;
         this.AA = AA;
@@ -72,6 +72,25 @@ public class DnsHeader {
         this.response = response;
         this.CD = CD;
     }
+
+    private DnsHeader() {
+        this.packetID = 0;
+        this.OpCode = 0;
+        this.AA = false;
+        this.TC = false;
+        this.RD = false;
+        this.RA = false;
+        this.Z = false;
+        this.RCODE = ResultCode.NO_ERROR; // assuming a NO_ERROR constant exists
+        this.QDCOUNT = 0;
+        this.ANCOUNT = 0;
+        this.NSCOUNT = 0;
+        this.ARCOUNT = 0;
+        this.authed = false;
+        this.response = false;
+        this.CD = false;
+    }
+
 
     // Getters and Setters
 
@@ -129,7 +148,7 @@ public class DnsHeader {
         short flags = (short) reader.read2Bytes();
 
         byte a = (byte) (flags >> 8);
-        byte b = (byte) (flags % 0xFF);
+        byte b = (byte) (flags & 0xFF);
 
         boolean rd = ((a & (1 << 0)) > 0);
         boolean tc = ((a & (1 << 1)) > 0);
@@ -153,7 +172,7 @@ public class DnsHeader {
 
     @Override
     public String toString() {
-        return "Header{" +
+        return "Header { " +
                 "packetID=" + packetID +
                 ", CD=" + CD +
                 ", response=" + response +
@@ -169,6 +188,6 @@ public class DnsHeader {
                 ", ANCOUNT=" + ANCOUNT +
                 ", NSCOUNT=" + NSCOUNT +
                 ", ARCOUNT=" + ARCOUNT +
-                '}';
+                " }";
     }
 }

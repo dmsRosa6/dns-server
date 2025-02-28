@@ -7,7 +7,7 @@ public class DnsQuestion {
     private String name;
     private QueryType type;
 
-    public DnsQuestion(String name, QueryType type){
+    private DnsQuestion(String name, QueryType type){
         this.name = name;
         this.type = type;
     }
@@ -25,5 +25,13 @@ public class DnsQuestion {
         QueryType t = QueryType.fromNum(reader.read2Bytes());
 
         return new DnsQuestion(qname,t);
+    }
+
+    @Override
+    public String toString(){
+        return "DnsQuestion { " +
+                "name: " + name +
+                ",type: " + type +
+                " }";
     }
 }

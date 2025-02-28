@@ -66,6 +66,8 @@ public class BytePacketReader {
         return index;
     }
 
+    public void step(int s){index += s;}
+
     public byte[] getBuffer(){
         return buffer;
     }
