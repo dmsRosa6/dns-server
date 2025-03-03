@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-import dmsrosa.dns_server.BytePacketReader;
+import dmsrosa.dns_server.BytePacketBuffer;
 import dmsrosa.dns_server.messages.DnsHeader;
 
 /**
@@ -15,7 +15,7 @@ public class DnsHeaderTest {
      * A simple dummy implementation of BytePacketReader for testing purposes.
      * It reads from a provided byte array.
      */
-    private static class DummyBytePacketReader extends BytePacketReader {
+    private static class DummyBytePacketReader extends BytePacketBuffer {
         private final byte[] data;
         private int pos = 0;
 

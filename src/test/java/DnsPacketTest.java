@@ -1,4 +1,4 @@
-import dmsrosa.dns_server.BytePacketReader;
+import dmsrosa.dns_server.BytePacketBuffer;
 import dmsrosa.dns_server.messages.DnsPacket;
 import dmsrosa.dns_server.messages.DnsQuestion;
 import dmsrosa.dns_server.messages.QueryType;
@@ -26,8 +26,8 @@ public class DnsPacketTest {
                 0x00, 0x01              // QCLASS: IN (0x0001)
         };
 
-        BytePacketReader reader = new BytePacketReader(dnsPacketData);
-        DnsPacket packet = DnsPacket.fromBuffer(reader);
+        BytePacketBuffer reader = new BytePacketBuffer(dnsPacketData);
+        DnsPacket packet = DnsPacket.read(reader);
 
         assertNotNull(packet);
         assertNotNull(packet.getHeader());

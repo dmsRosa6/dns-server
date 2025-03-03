@@ -1,4 +1,4 @@
-import dmsrosa.dns_server.BytePacketReader;
+import dmsrosa.dns_server.BytePacketBuffer;
 import dmsrosa.dns_server.messages.DnsQuestion;
 import dmsrosa.dns_server.messages.QueryType;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ public class DnsQuestionTest {
      * A simple dummy implementation of BytePacketReader for testing purposes.
      * It returns a preset QName and a query type value.
      */
-    private static class DummyBytePacketReader extends BytePacketReader {
+    private static class DummyBytePacketReader extends BytePacketBuffer {
         private final String qname;
         private final int queryTypeValue;
         private boolean qnameRead = false;  // to simulate sequential reads

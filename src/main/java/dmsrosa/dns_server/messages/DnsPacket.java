@@ -1,6 +1,6 @@
 package dmsrosa.dns_server.messages;
 
-import dmsrosa.dns_server.BytePacketReader;
+import dmsrosa.dns_server.BytePacketBuffer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,13 +13,21 @@ public class DnsPacket {
     private List<DnsRecord> authorities;
     private List<DnsRecord> resources;
 
-    private DnsPacket(DnsHeader header, List<DnsQuestion> questions, List<DnsRecord> answers,
-                      List<DnsRecord> authorities, List<DnsRecord> resources) {
+    public DnsPacket(DnsHeader header, List<DnsQuestion> questions, List<DnsRecord> answers,
+                     List<DnsRecord> authorities, List<DnsRecord> resources) {
         this.header = header;
         this.questions = questions;
         this.answers = answers;
         this.authorities = authorities;
         this.resources = resources;
+    }
+
+    public DnsPacket(){
+        this.header = new DnsHeader();
+        questions = new ArrayList<>();
+        answers = new ArrayList<>();
+        authorities = new ArrayList<>();
+        resources = new ArrayList<>();
     }
 
     public DnsHeader getHeader() {
@@ -42,7 +50,7 @@ public class DnsPacket {
         return resources;
     }
 
-    public static DnsPacket fromBuffer(BytePacketReader reader) throws IOException {
+    public static DnsPacket read(BytePacketBuffer reader) throws IOException {
         DnsHeader header = DnsHeader.read(reader);
         List<DnsQuestion> questions = new ArrayList<>();
         List<DnsRecord> answers = new ArrayList<>();
@@ -63,6 +71,29 @@ public class DnsPacket {
         }
         return new DnsPacket(header, questions, answers, authorities, resources);
     }
+
+    public void write(BytePacketBuffer writer) {
+        header.setQDCOUNT((short) questions.size() );
+        header.setANCOUNT((short) answers.size() );
+        header.setNSCOUNT((short) authorities.size() );
+        header.setARCOUNT((short) resources.size() );
+
+        header.write(writer);
+
+        for (DnsQuestion question : questions) {
+            question.write(writer);
+        }
+        for (DnsRecord rec : answers) {
+            rec.write(writer);
+        }
+        for (DnsRecord rec : authorities) {
+            rec.write(writer);
+        }
+        for (DnsRecord rec : resources) {
+            rec.write(writer);
+        }
+    }
+
 
     @Override
     public String toString() {

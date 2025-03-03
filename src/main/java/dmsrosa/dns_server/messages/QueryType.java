@@ -19,9 +19,16 @@ public abstract class QueryType {
         return new UnknownQueryType(n);
     }
 
+    @Override
+    public String toString(){
+        return "Query type {" +
+                "value: " + value +
+                "}";
+    }
+
     public static class AQueryType extends QueryType{
 
-        private AQueryType() {
+        public AQueryType() {
             super(1);
         }
     }
@@ -30,5 +37,6 @@ public abstract class QueryType {
         private UnknownQueryType(int value) {
             super(value);
         }
+
     }
 }

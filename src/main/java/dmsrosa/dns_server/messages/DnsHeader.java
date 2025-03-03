@@ -1,7 +1,8 @@
 package dmsrosa.dns_server.messages;
 
 
-import dmsrosa.dns_server.BytePacketReader;
+import dmsrosa.dns_server.BytePacketBuffer;
+
 /**
  * Represents the header of a DNS protocol message as defined in RFC 1035.
  *
@@ -73,7 +74,7 @@ public class DnsHeader {
         this.CD = CD;
     }
 
-    private DnsHeader() {
+    public DnsHeader() {
         this.packetID = 0;
         this.OpCode = 0;
         this.AA = false;
@@ -81,7 +82,7 @@ public class DnsHeader {
         this.RD = false;
         this.RA = false;
         this.Z = false;
-        this.RCODE = ResultCode.NO_ERROR; // assuming a NO_ERROR constant exists
+        this.RCODE = ResultCode.NO_ERROR;
         this.QDCOUNT = 0;
         this.ANCOUNT = 0;
         this.NSCOUNT = 0;
@@ -90,7 +91,6 @@ public class DnsHeader {
         this.response = false;
         this.CD = false;
     }
-
 
     // Getters and Setters
 
@@ -142,7 +142,67 @@ public class DnsHeader {
         return ARCOUNT;
     }
 
-    public static DnsHeader read(BytePacketReader reader){
+    public void setAA(boolean AA) {
+        this.AA = AA;
+    }
+
+    public void setAuthed(boolean authed) {
+        this.authed = authed;
+    }
+
+    public void setANCOUNT(short ANCOUNT) {
+        this.ANCOUNT = ANCOUNT;
+    }
+
+    public void setCD(boolean CD) {
+        this.CD = CD;
+    }
+
+    public void setOpCode(byte opCode) {
+        OpCode = opCode;
+    }
+
+    public void setPacketID(short packetID) {
+        this.packetID = packetID;
+    }
+
+    public void setQDCOUNT(short QDCOUNT) {
+        this.QDCOUNT = QDCOUNT;
+    }
+
+    public void setNSCOUNT(short NSCOUNT) {
+        this.NSCOUNT = NSCOUNT;
+    }
+
+    public void setRA(boolean RA) {
+        this.RA = RA;
+    }
+
+    public void setRCODE(ResultCode RCODE) {
+        this.RCODE = RCODE;
+    }
+
+    public void setRD(boolean RD) {
+        this.RD = RD;
+    }
+
+    public void setResponse(boolean response) {
+        this.response = response;
+    }
+
+    public void setTC(boolean TC) {
+        this.TC = TC;
+    }
+
+    public void setZ(boolean z) {
+        Z = z;
+    }
+
+    public void setARCOUNT(short ARCOUNT) {
+        this.ARCOUNT = ARCOUNT;
+    }
+
+    public static DnsHeader read(BytePacketBuffer reader){
         short id = (short) reader.read2Bytes();
 
         short flags = (short) reader.read2Bytes();
@@ -168,6 +228,33 @@ public class DnsHeader {
         short resource_entries = (short) reader.read2Bytes();
 
         return new DnsHeader(id, opcode, aa, tc, rd, ra, z, rescode, questions, answers, authoritative_entries,resource_entries, authed_data, response, cd);
+    }
+
+    public void write(BytePacketBuffer writer) {
+
+        writer.write2Bytes(packetID);
+
+        int flagsA = 0;
+        if (response) flagsA |= (1 << 7);
+        flagsA |= ((OpCode & 0x0F) << 3);
+        if (AA) flagsA |= (1 << 2);
+        if (TC) flagsA |= (1 << 1);
+        if (RD) flagsA |= (1 << 0);
+
+        int flagsB = 0;
+        if (RA) flagsB |= (1 << 7);
+        if (Z) flagsB |= (1 << 6);
+        if (authed) flagsB |= (1 << 5);
+        if (CD) flagsB |= (1 << 4);
+        flagsB |= (RCODE.getCode() & 0x0F);
+
+        int flags = (flagsA << 8) | flagsB;
+        writer.write2Bytes((short) flags);
+
+        writer.write2Bytes(QDCOUNT);
+        writer.write2Bytes(ANCOUNT);
+        writer.write2Bytes(NSCOUNT);
+        writer.write2Bytes(ARCOUNT);
     }
 
     @Override

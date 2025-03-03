@@ -1,6 +1,6 @@
 package dmsrosa.dns_server.messages;
 
-import dmsrosa.dns_server.BytePacketReader;
+import dmsrosa.dns_server.BytePacketBuffer;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -23,7 +23,7 @@ public abstract class DnsRecord {
         return ttl;
     }
 
-    public static DnsRecord read(BytePacketReader reader) throws IOException {
+    public static DnsRecord read(BytePacketBuffer reader) throws IOException {
         String domain = reader.readQName();
         int qtypeNum = reader.read2Bytes();
         QueryType qtype = QueryType.fromNum(qtypeNum);
@@ -43,6 +43,26 @@ public abstract class DnsRecord {
         }
         reader.step(dataLen);
         return new UnknownDnsRecord(domain, qtypeNum, dataLen, ttl);
+    }
+
+    public int write(BytePacketBuffer writer){
+        int start = writer.getPos();
+
+        if(this instanceof ARecord){
+            writer.writeQName(domain);
+            writer.write2Bytes((short) 1);
+            writer.write2Bytes((short) 1);
+            writer.write4Bytes(ttl);
+            writer.write2Bytes((short) 4);
+            for(byte b :((ARecord) this).getAddr().getAddress()){
+                writer.writeByte(b);
+            }
+        }else{
+            System.out.println("Skipping unknown record: " + this);
+            return -1;
+        }
+
+        return writer.getPos() - start;
     }
 
     @Override
