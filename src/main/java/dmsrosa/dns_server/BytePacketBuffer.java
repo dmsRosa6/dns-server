@@ -17,6 +17,16 @@ public class BytePacketBuffer {
         index = 0;
     }
 
+    public void setByte(int pos, byte b){
+        this.buffer[pos] = b;
+    }
+
+
+    public void set2Bytes(int pos, short b){
+        this.buffer[pos] = (byte) ((b >> 8) & 0xFF);
+        this.buffer[pos+1] = (byte) (b & 0xFF);
+    }
+
     public byte readByte(){
         return buffer[index++];
     }
@@ -31,7 +41,6 @@ public class BytePacketBuffer {
     public int readUnsignedByte() {
         return readByte() & 0XFF;
     }
-
 
     public int read2Bytes(){
         int h = readUnsignedByte();

@@ -6,13 +6,73 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 
+/**
+ * Represents a DNS Resource Record as defined in RFC 1035.
+ *
+ * <p>This abstract class encapsulates the common elements of a DNS record,
+ * such as the domain name and TTL (Time-to-Live). The DNS record format generally follows:
+ *
+ * <pre>
+ *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *   |                                               |
+ *   /                     NAME                      /
+ *   |                                               |
+ *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *   |                     TYPE                      |
+ *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *   |                    CLASS                      |
+ *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *   |                      TTL                      |
+ *   |                                               |
+ *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *   |                   RDLENGTH                    |
+ *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *   |                     RDATA                     |
+ *   |                                               |
+ *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ * </pre>
+ *
+ * <p>The supported record types in this implementation include:
+ * <ul>
+ *   <li><b>A (1)</b>: Maps a domain name to an IPv4 address.</li>
+ *   <li><b>NS (2)</b>: Specifies an authoritative name server for the domain.</li>
+ *   <li><b>CNAME (5)</b>: Provides an alias for the canonical (true) domain name.</li>
+ *   <li><b>MX (15)</b>: Designates a mail exchange server for handling email for the domain.</li>
+ *   <li><b>AAAA (28)</b>: Maps a domain name to an IPv6 address.</li>
+ * </ul>
+ *
+ * <p>The static {@code read} method parses a DNS record from a {@link BytePacketBuffer}.
+ * It first reads the common header fields (domain, type, class, TTL, and data length)
+ * and then delegates to type-specific factory methods (e.g., {@code ARecord.createFromBuffer})
+ * based on the record type.
+ *
+ * <p>The abstract {@code write} method must be implemented by each concrete subclass to
+ * serialize the record back into a {@link BytePacketBuffer} using the proper format.
+ *
+ * <p>Unknown record types are handled by skipping the data section and creating an instance
+ * of {@code UnknownDnsRecord}.
+ *
+ * @see <a href="https://tools.ietf.org/html/rfc1035">RFC 1035 - Domain Names - Implementation and Specification</a>
+ */
 public abstract class DnsRecord {
     private final String domain;
     private final int ttl;
+    private final QueryType queryType;
+
+    protected DnsRecord(String domain, int ttl, QueryType c) {
+        this.domain = domain;
+        this.ttl = ttl;
+        this.queryType = c;
+    }
 
     protected DnsRecord(String domain, int ttl) {
         this.domain = domain;
         this.ttl = ttl;
+        this.queryType = null;
+    }
+
+    public QueryType getCode() {
+        return queryType;
     }
 
     public String getDomain() {
@@ -31,45 +91,31 @@ public abstract class DnsRecord {
         int ttl = reader.read4Bytes();
         int dataLen = reader.read2Bytes();
 
-        if (qtype instanceof QueryType.AQueryType) {
-            int rawAddr = reader.read4Bytes();
-            byte[] addrBytes = new byte[4];
-            addrBytes[0] = (byte) ((rawAddr >> 24) & 0xFF);
-            addrBytes[1] = (byte) ((rawAddr >> 16) & 0xFF);
-            addrBytes[2] = (byte) ((rawAddr >> 8) & 0xFF);
-            addrBytes[3] = (byte) (rawAddr & 0xFF);
-            Inet4Address addr = (Inet4Address) InetAddress.getByAddress(addrBytes);
-            return new ARecord(domain, addr, ttl);
+        switch (qtype.getValue()){
+            case 1:
+                return ARecord.createFromBuffer(reader,domain,ttl);
+            case 2:
+                return NSRecord.createFromBuffer(reader,domain,ttl);
+            case 5:
+                return CNameRecord.createFromBuffer(reader,domain,ttl);
+            case 15:
+                return MXRecord.createFromBuffer(reader,domain,ttl);
+            case 28:
+                return AAAARecord.createFromBuffer(reader,domain,ttl);
         }
+
         reader.step(dataLen);
+
         return new UnknownDnsRecord(domain, qtypeNum, dataLen, ttl);
     }
 
-    public int write(BytePacketBuffer writer){
-        int start = writer.getPos();
-
-        if(this instanceof ARecord){
-            writer.writeQName(domain);
-            writer.write2Bytes((short) 1);
-            writer.write2Bytes((short) 1);
-            writer.write4Bytes(ttl);
-            writer.write2Bytes((short) 4);
-            for(byte b :((ARecord) this).getAddr().getAddress()){
-                writer.writeByte(b);
-            }
-        }else{
-            System.out.println("Skipping unknown record: " + this);
-            return -1;
-        }
-
-        return writer.getPos() - start;
-    }
+    public abstract int write(BytePacketBuffer writer);
 
     @Override
     public String toString(){
         return "DnsRecord { " +
                 "domain: " + domain +
-                ",ttl: " + ttl +
+                ", ttl: " + ttl +
                 " }";
     }
 }

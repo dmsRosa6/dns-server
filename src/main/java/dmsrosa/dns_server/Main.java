@@ -14,8 +14,8 @@ public class Main {
 
   public static void main(String[] args) {
     try {
-      String qname = "google.com";
-      QueryType qtype = new QueryType.AQueryType();
+      String qname = "yahoo.com";
+      QueryType qtype = new QueryType.MXQueryType();
       InetAddress dnsServer = InetAddress.getByName("8.8.8.8");
       int dnsPort = 53;
       DatagramSocket socket = new DatagramSocket(43210);
