@@ -1,10 +1,10 @@
 package dmsrosa.dns_server.messages;
 
-import dmsrosa.dns_server.BytePacketBuffer;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import dmsrosa.dns_server.BytePacketBuffer;
 
 public class DnsPacket {
     private DnsHeader header;
@@ -48,6 +48,18 @@ public class DnsPacket {
 
     public List<DnsRecord> getResources() {
         return resources;
+    }
+
+    public void setAnswers(List<DnsRecord> answers) {
+        this.answers = answers;
+    }
+
+    public void setAuthorities(List<DnsRecord> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void setResources(List<DnsRecord> resources) {
+        this.resources = resources;
     }
 
     public static DnsPacket read(BytePacketBuffer reader) throws IOException {
