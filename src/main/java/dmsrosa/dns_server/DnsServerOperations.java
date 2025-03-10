@@ -29,11 +29,12 @@ public class DnsServerOperations {
         DnsPacket packet2Send = new DnsPacket();
         DnsHeader h = packet2Send.getHeader();
 
+        System.out.println("Received query: " + receivePacket.getQuestions().getFirst());
+
         h.setPacketID(receivePacket.getHeader().getPacketID());
         h.setRD(true);
         h.setRA(true);
         h.setResponse(true);
-
         if (receivePacket.getQuestions().size() == 1) {
             DnsQuestion q = receivePacket.getQuestions().getFirst();
 
@@ -63,7 +64,7 @@ public class DnsServerOperations {
         BytePacketBuffer buffer = new BytePacketBuffer();
 
         packet2Send.write(buffer);
-
+        System.out.println("Response :" + packet2Send.getAnswers().getFirst());
         int len = buffer.getPos();
         byte[] data = buffer.getRange(0, len);
 

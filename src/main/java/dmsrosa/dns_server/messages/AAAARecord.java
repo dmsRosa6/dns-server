@@ -1,13 +1,12 @@
 package dmsrosa.dns_server.messages;
 
-import dmsrosa.dns_server.BytePacketBuffer;
-
-import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class AAAARecord extends DnsRecord{
+import dmsrosa.dns_server.BytePacketBuffer;
+
+public class AAAARecord extends DnsRecord {
     private Inet6Address addr;
 
     protected AAAARecord(String domain, Inet6Address addr, int ttl, QueryType c) {
@@ -24,7 +23,8 @@ public class AAAARecord extends DnsRecord{
         return addr;
     }
 
-    public static AAAARecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl) throws UnknownHostException {
+    public static AAAARecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl)
+            throws UnknownHostException {
         int rawAddr1 = reader.read4Bytes();
         int rawAddr2 = reader.read4Bytes();
         int rawAddr3 = reader.read4Bytes();
@@ -56,7 +56,8 @@ public class AAAARecord extends DnsRecord{
         return new AAAARecord(domain, addr, ttl, new QueryType.AAAAQueryType());
     }
 
-    public int write(BytePacketBuffer writer){
+    @Override
+    public int write(BytePacketBuffer writer) {
         int start = writer.getPos();
 
         writer.writeQName(getDomain());
@@ -65,8 +66,8 @@ public class AAAARecord extends DnsRecord{
         writer.write4Bytes((short) getTtl());
         writer.write2Bytes((short) 16);
 
-        //TODO: this can be problematic
-        for(byte b: getAddr().getAddress()){
+        // TODO: this can be problematic
+        for (byte b : getAddr().getAddress()) {
             writer.writeByte(b);
         }
 
@@ -74,7 +75,7 @@ public class AAAARecord extends DnsRecord{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "AAAARecord { " +
                 "domain: " + getDomain() +
                 ", ttl: " + getTtl() +

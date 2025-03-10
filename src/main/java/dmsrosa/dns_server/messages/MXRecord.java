@@ -2,9 +2,9 @@ package dmsrosa.dns_server.messages;
 
 import dmsrosa.dns_server.BytePacketBuffer;
 
-public class MXRecord extends DnsRecord{
-    private String host;
-    private short priority;
+public class MXRecord extends DnsRecord {
+    private final String host;
+    private final short priority;
 
     protected MXRecord(String domain, String host, short priority, int ttl, QueryType c) {
         super(domain, ttl, c);
@@ -26,14 +26,15 @@ public class MXRecord extends DnsRecord{
         return priority;
     }
 
-    public static MXRecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl){
+    public static MXRecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl) {
         int prio = reader.read2Bytes();
         String mx = reader.readQName();
 
-        return new MXRecord(domain,mx,(short) prio,ttl,new QueryType.NSQueryType());
+        return new MXRecord(domain, mx, (short) prio, ttl, new QueryType.NSQueryType());
     }
 
-    public int write(BytePacketBuffer writer){
+    @Override
+    public int write(BytePacketBuffer writer) {
         int start = writer.getPos();
 
         writer.writeQName(getDomain());
@@ -55,12 +56,12 @@ public class MXRecord extends DnsRecord{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "MXRecord { " +
                 "domain: " + getDomain() +
                 ", ttl: " + getTtl() +
-                ", host: " + getHost()+
-                ", priority: " + getPriority()+
+                ", host: " + getHost() +
+                ", priority: " + getPriority() +
                 " }";
     }
 }
