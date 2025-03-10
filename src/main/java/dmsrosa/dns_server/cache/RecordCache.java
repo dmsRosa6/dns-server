@@ -7,6 +7,7 @@ import dmsrosa.dns_server.cache.DoublyLinkedListImpl.Node;
 import dmsrosa.dns_server.messages.DnsRecord;
 import dmsrosa.dns_server.utils.Pair;
 
+// TODO Might wanna make this concurrent
 public class RecordCache {
     private final Map<String, Pair<DnsRecord, Node<String>>> cache;
     private final DoublyLinkedListImpl<String> hist;
