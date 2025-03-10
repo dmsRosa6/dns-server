@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -15,16 +14,14 @@
         <java.version>21</java.version>
     </properties>
 
-    <!-- Add JUnit 5 dependencies -->
     <dependencies>
-        <!-- JUnit Jupiter API for writing tests -->
+        <!-- JUnit 5 dependencies for testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
-        <!-- JUnit Jupiter Engine for running tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -35,30 +32,36 @@
 
     <build>
         <plugins>
+            <!-- maven-jar-plugin: Create the jar with the main class entry -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
-                    <release>21</release>
+                    <archive>
+                        <manifestEntries>
+                            <Main-Class>dmsrosa.dns_server.Main</Main-Class>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
+
+            <!-- maven-assembly-plugin: Create a fat jar with dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
-                    <finalName>dmsrosa-dns-server</finalName> 
+                    <finalName>dmsrosa-dns-server</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>Main</mainClass>
+                            <mainClass>dmsrosa.dns_server.Main</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>${dir}</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -70,6 +73,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- maven-surefire-plugin for testing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

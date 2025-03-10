@@ -1,0 +1,6 @@
+DnsHeaderTest$DummyBytePacketReader.class
+DnsPacketTest.class
+DnsQuestionTest$DummyBytePacketReader.class
+BytePacketBufferTest.class
+DnsHeaderTest.class
+DnsQuestionTest.class

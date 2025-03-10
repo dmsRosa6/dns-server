@@ -1,20 +1,24 @@
 package dmsrosa.dns_server.messages;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import dmsrosa.dns_server.BytePacketBuffer;
+import dmsrosa.dns_server.utils.Pair;
 
 public class DnsPacket {
     private DnsHeader header;
     private List<DnsQuestion> questions;
     private List<DnsRecord> answers;
-    private List<DnsRecord> authorities;
+    private List<NSRecord> authorities;
     private List<DnsRecord> resources;
 
     public DnsPacket(DnsHeader header, List<DnsQuestion> questions, List<DnsRecord> answers,
-                     List<DnsRecord> authorities, List<DnsRecord> resources) {
+            List<NSRecord> authorities, List<DnsRecord> resources) {
         this.header = header;
         this.questions = questions;
         this.answers = answers;
@@ -22,7 +26,7 @@ public class DnsPacket {
         this.resources = resources;
     }
 
-    public DnsPacket(){
+    public DnsPacket() {
         this.header = new DnsHeader();
         questions = new ArrayList<>();
         answers = new ArrayList<>();
@@ -42,7 +46,7 @@ public class DnsPacket {
         return answers;
     }
 
-    public List<DnsRecord> getAuthorities() {
+    public List<NSRecord> getAuthorities() {
         return authorities;
     }
 
@@ -54,7 +58,7 @@ public class DnsPacket {
         this.answers = answers;
     }
 
-    public void setAuthorities(List<DnsRecord> authorities) {
+    public void setAuthorities(List<NSRecord> authorities) {
         this.authorities = authorities;
     }
 
@@ -66,7 +70,7 @@ public class DnsPacket {
         DnsHeader header = DnsHeader.read(reader);
         List<DnsQuestion> questions = new ArrayList<>();
         List<DnsRecord> answers = new ArrayList<>();
-        List<DnsRecord> authorities = new ArrayList<>();
+        List<NSRecord> authorities = new ArrayList<>();
         List<DnsRecord> resources = new ArrayList<>();
 
         for (int i = 0; i < header.getQDCOUNT(); i++) {
@@ -76,7 +80,7 @@ public class DnsPacket {
             answers.add(DnsRecord.read(reader));
         }
         for (int i = 0; i < header.getNSCOUNT(); i++) {
-            authorities.add(DnsRecord.read(reader));
+            authorities.add((NSRecord) DnsRecord.read(reader));
         }
         for (int i = 0; i < header.getARCOUNT(); i++) {
             resources.add(DnsRecord.read(reader));
@@ -85,10 +89,10 @@ public class DnsPacket {
     }
 
     public void write(BytePacketBuffer writer) {
-        header.setQDCOUNT((short) questions.size() );
-        header.setANCOUNT((short) answers.size() );
-        header.setNSCOUNT((short) authorities.size() );
-        header.setARCOUNT((short) resources.size() );
+        header.setQDCOUNT((short) questions.size());
+        header.setANCOUNT((short) answers.size());
+        header.setNSCOUNT((short) authorities.size());
+        header.setARCOUNT((short) resources.size());
 
         header.write(writer);
 
@@ -106,6 +110,42 @@ public class DnsPacket {
         }
     }
 
+    public Optional<InetAddress> getRandomA() {
+        return answers.stream()
+                .filter(record -> record instanceof ARecord)
+                .map(record -> (InetAddress) ((ARecord) record).getAddr())
+                .findFirst();
+    }
+
+    public List<Pair<String, String>> getNS(String qname) {
+        return authorities.stream()
+                .filter(ns -> qname.endsWith(ns.getDomain()))
+                .map(ns -> new Pair<>(ns.getDomain(), ns.getHost()))
+                .collect(Collectors.toList());
+    }
+
+    public Optional<InetAddress> getResolvedNS(String qname) {
+        for (Pair<String, String> ns : getNS(qname)) {
+            String host = ns.getSecond();
+            for (DnsRecord rec : resources) {
+                if (rec instanceof ARecord) {
+                    ARecord aRec = (ARecord) rec;
+                    if (aRec.getDomain().equals(host)) {
+                        return Optional.of(aRec.getAddr());
+                    }
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> getUnresolvedNS(String qname) {
+        java.util.List<Pair<String, String>> nsList = getNS(qname);
+        if (nsList.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(nsList.get(0).getSecond());
+    }
 
     @Override
     public String toString() {

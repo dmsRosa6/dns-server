@@ -2,7 +2,7 @@ package dmsrosa.dns_server.messages;
 
 import dmsrosa.dns_server.BytePacketBuffer;
 
-public class NSRecord extends DnsRecord{
+public class NSRecord extends DnsRecord {
     private final String host;
 
     protected NSRecord(String domain, String host, int ttl, QueryType queryType) {
@@ -19,13 +19,14 @@ public class NSRecord extends DnsRecord{
         return host;
     }
 
-    public static NSRecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl){
+    public static NSRecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl) {
         String ns = reader.readQName();
 
-        return new NSRecord(domain,ns,ttl, new QueryType.NSQueryType());
+        return new NSRecord(domain, ns, ttl, new QueryType.NSQueryType());
     }
 
-    public int write(BytePacketBuffer writer){
+    @Override
+    public int write(BytePacketBuffer writer) {
         int start = writer.getPos();
 
         writer.writeQName(getDomain());
@@ -45,11 +46,11 @@ public class NSRecord extends DnsRecord{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "NSRecord { " +
                 "domain: " + getDomain() +
                 ", ttl: " + getTtl() +
-                ", host: " + getHost()+
+                ", host: " + getHost() +
                 " }";
     }
 }

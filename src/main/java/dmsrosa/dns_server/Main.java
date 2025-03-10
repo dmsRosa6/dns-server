@@ -9,12 +9,15 @@ public class Main {
   public static void main(String[] args) {
     try (DatagramSocket socket = new DatagramSocket(2053)) {
 
-      while (true) { 
-          try {
-              DnsServerOperations.handleQuery(socket);
-          } catch (IOException e) {
-              e.printStackTrace();
-          }
+      System.out.println("Server started");
+
+      while (true) {
+        try {
+          DnsServerOperations.handleQuery(socket);
+
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
     } catch (SocketException e) {
       e.printStackTrace();
