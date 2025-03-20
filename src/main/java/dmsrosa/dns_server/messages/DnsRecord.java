@@ -73,6 +73,12 @@ public abstract class DnsRecord {
     private final int ttl;
     private final QueryType queryType;
 
+    protected DnsRecord(QueryType qType) {
+        this.domain = null;
+        this.ttl = -1;
+        queryType = qType;
+    }
+
     protected DnsRecord(String domain, int ttl, QueryType c) {
         this.domain = domain;
         this.ttl = ttl;
