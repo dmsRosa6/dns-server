@@ -51,9 +51,6 @@ To further improve the project, the following enhancements could be cool:
   
 - **DNSSEC Support:**  
   The absence of DNSSEC means the server is vulnerable to DNS poisoning attacks, where a malicious server could return falsified records for a domain.
-  
-- **Recursive Resolution:**  
-  The server is still missing a recursive resolver component, which would enable it to fully resolve queries by contacting other DNS servers as needed.
 
 ---
 
