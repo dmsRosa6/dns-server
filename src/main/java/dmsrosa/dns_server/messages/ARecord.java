@@ -1,10 +1,10 @@
 package dmsrosa.dns_server.messages;
 
-import dmsrosa.dns_server.BytePacketBuffer;
-
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import dmsrosa.dns_server.BytePacketBuffer;
 
 class ARecord extends DnsRecord {
     private final Inet4Address addr;
@@ -23,7 +23,8 @@ class ARecord extends DnsRecord {
         return addr;
     }
 
-    public static ARecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl) throws UnknownHostException {
+    public static ARecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl)
+            throws UnknownHostException {
         int rawAddr = reader.read4Bytes();
         byte[] addrBytes = new byte[4];
         addrBytes[0] = (byte) ((rawAddr >> 24) & 0xFF);
@@ -44,12 +45,13 @@ class ARecord extends DnsRecord {
         writer.write4Bytes(getTtl());
         writer.write2Bytes((short) 4);
 
-        for(byte b : addr.getAddress()){
+        for (byte b : addr.getAddress()) {
             writer.writeByte(b);
         }
 
         return writer.getPos() - start;
     }
+
     @Override
     public String toString() {
         return "ARecord{" +
@@ -59,4 +61,3 @@ class ARecord extends DnsRecord {
                 '}';
     }
 }
-

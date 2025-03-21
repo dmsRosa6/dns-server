@@ -15,7 +15,7 @@ import dmsrosa.dns_server.messages.ResultCode;
 
 public class DnsServerOperations {
 
-    public static void handleQuery(DatagramSocket socket) throws IOException {
+    public static void handleQuery(DatagramSocket socket, Cache cache) throws IOException {
         if (socket.isClosed()) {
             throw new RuntimeException("Socket is closed");
         }
@@ -41,7 +41,7 @@ public class DnsServerOperations {
             String name = q.getName();
             QueryType qType = q.getType();
             try {
-                DnsPacket l = lookup(name, qType);
+                DnsPacket l = lookup(name, qType, cache);
 
                 if (l == null) {
                     throw new IOException();
@@ -51,6 +51,7 @@ public class DnsServerOperations {
                 h.setRCODE(ResultCode.NO_ERROR);
 
                 packet2Send.setAnswers(l.getAnswers());
+                cache.store(l.getAnswers());
                 packet2Send.setAuthorities(l.getAuthorities());
                 packet2Send.setResources(l.getResources());
 
@@ -98,12 +99,18 @@ public class DnsServerOperations {
     }
 
     // TODO maybe create a response that can be string or dnspacket
-    public static DnsPacket lookup(String qname, QueryType qType) throws IOException {
+    public static DnsPacket lookup(String qname, QueryType qType, Cache cache) throws IOException {
 
         InetAddress addr = InetAddress.getByName("198.41.0.4");
         int port = 53;
         DnsPacket packet = null;
         System.out.println("Performing lookup for: " + qname);
+        DnsPacket cached = cache.lookup(qname, qType);
+
+        if (cached != null) {
+            System.out.println("Using cache");
+            return cached;
+        }
         try (DatagramSocket socket = new DatagramSocket(43210)) {
             while (true) {
                 packet = look(socket, addr, port, qname, qType);
@@ -126,7 +133,7 @@ public class DnsServerOperations {
                     throw new QNameNotFound("No NS records exist");
                 }
 
-                DnsPacket p = lookup(nextQName.get(), new QueryType.AQueryType());
+                DnsPacket p = lookup(nextQName.get(), new QueryType.AQueryType(), cache);
                 nextAddr = p.getRandomA();
 
                 if (!nextAddr.isPresent()) {

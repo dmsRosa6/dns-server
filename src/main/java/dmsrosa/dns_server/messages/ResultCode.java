@@ -1,11 +1,11 @@
 package dmsrosa.dns_server.messages;
 
 public enum ResultCode {
-    
+
     NO_ERROR("No Error", (byte) 0),
     FORMAT_ERROR("Format Error", (byte) 1),
     SERVER_FAILURE("Server Failure", (byte) 2),
-    NAME_ERROR("Name Error", (byte) 3),
+    NX_DOMAIN("Domain doesnt exist", (byte) 3),
     NOT_IMPLEMENTED("Not Implemented", (byte) 4),
     REFUSED("Refused", (byte) 5);
 
@@ -25,9 +25,9 @@ public enum ResultCode {
         return description;
     }
 
-    public static ResultCode fromCode(byte code){
+    public static ResultCode fromCode(byte code) {
         for (ResultCode elem : ResultCode.values()) {
-            if (elem.getCode() == code ) {
+            if (elem.getCode() == code) {
                 return elem;
             }
         }

@@ -91,7 +91,7 @@ public abstract class DnsRecord {
         this.queryType = null;
     }
 
-    public QueryType getCode() {
+    public QueryType getQueryType() {
         return queryType;
     }
 
@@ -137,7 +137,7 @@ public abstract class DnsRecord {
                 return SRVRecord.createFromBuffer(reader, domain, ttl);
             }
             case 41 -> {
-                return OPTRecord.createFromBuffer(reader);
+                // return OPTRecord.createFromBuffer(reader);
             }
         }
 

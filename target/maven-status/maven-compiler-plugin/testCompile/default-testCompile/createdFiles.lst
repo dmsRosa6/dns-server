@@ -1,4 +1,6 @@
+CacheTest.class
 DnsHeaderTest$DummyBytePacketReader.class
+DummyDnsRecord.class
 DnsPacketTest.class
 DnsQuestionTest$DummyBytePacketReader.class
 BytePacketBufferTest.class

@@ -1,4 +1,5 @@
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/BytePacketBuffer.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/Cache.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/DnsServerOperations.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/Main.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/exceptions/QNameNotFound.java
@@ -11,7 +12,11 @@
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/DnsRecord.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/MXRecord.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/NSRecord.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/OPTRecord.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/QueryType.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/ResultCode.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/SOARecord.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/SRVRecord.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/TXTRecord.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/messages/UnknownDnsRecord.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/utils/Pair.java
