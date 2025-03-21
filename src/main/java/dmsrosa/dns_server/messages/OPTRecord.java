@@ -14,10 +14,26 @@ public class OPTRecord extends DnsRecord {
         this.data = data;
     }
 
+    public short getPacketLen() {
+        return packetLen;
+    }
+
+    public int getFlags() {
+        return flags;
+    }
+
+    public String getData() {
+        return data;
+    }
+
     @Override
     public int write(BytePacketBuffer writer) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'write'");
+    }
+
+    public static DnsRecord createFromBuffer(BytePacketBuffer reader) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createFromBuffer'");
     }
 
 }

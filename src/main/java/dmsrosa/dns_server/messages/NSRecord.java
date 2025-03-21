@@ -40,7 +40,7 @@ public class NSRecord extends DnsRecord {
 
         int size = writer.getPos() - pos;
 
-        writer.set2Bytes(pos, (short) size);
+        writer.set2Bytes(pos - 2, (short) size);
 
         return writer.getPos() - start;
     }

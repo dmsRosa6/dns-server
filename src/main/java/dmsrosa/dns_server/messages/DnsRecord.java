@@ -121,11 +121,23 @@ public abstract class DnsRecord {
             case 5 -> {
                 return CNameRecord.createFromBuffer(reader, domain, ttl);
             }
+            case 6 -> {
+                return SOARecord.createFromBuffer(reader, domain, ttl);
+            }
             case 15 -> {
                 return MXRecord.createFromBuffer(reader, domain, ttl);
             }
+            case 16 -> {
+                return TXTRecord.createFromBuffer(reader, domain, ttl);
+            }
             case 28 -> {
                 return AAAARecord.createFromBuffer(reader, domain, ttl);
+            }
+            case 33 -> {
+                return SRVRecord.createFromBuffer(reader, domain, ttl);
+            }
+            case 41 -> {
+                return OPTRecord.createFromBuffer(reader);
             }
         }
 

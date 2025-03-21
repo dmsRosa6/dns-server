@@ -2,7 +2,7 @@ package dmsrosa.dns_server.messages;
 
 import dmsrosa.dns_server.BytePacketBuffer;
 
-public class CNameRecord extends DnsRecord{
+public class CNameRecord extends DnsRecord {
     private final String host;
 
     protected CNameRecord(String domain, String host, int ttl, QueryType c) {
@@ -19,20 +19,19 @@ public class CNameRecord extends DnsRecord{
         return host;
     }
 
-    public static CNameRecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl){
+    public static CNameRecord createFromBuffer(BytePacketBuffer reader, String domain, int ttl) {
         String cname = reader.readQName();
 
-        return new CNameRecord(domain,cname,ttl,new QueryType.NSQueryType());
+        return new CNameRecord(domain, cname, ttl, new QueryType.NSQueryType());
     }
 
-    public int write(BytePacketBuffer writer){
+    public int write(BytePacketBuffer writer) {
         int start = writer.getPos();
 
         writer.writeQName(getDomain());
         writer.write2Bytes((short) 5);
         writer.write2Bytes((short) 1);
         writer.write4Bytes(getTtl());
-
 
         writer.write2Bytes((short) 0);
 
@@ -42,17 +41,17 @@ public class CNameRecord extends DnsRecord{
 
         int size = pos - writer.getPos();
 
-        writer.set2Bytes(pos, (short) size);
+        writer.set2Bytes(pos - 2, (short) size);
 
         return writer.getPos() - start;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "CNameRecord { " +
                 "domain: " + super.getDomain() +
                 ", ttl: " + super.getTtl() +
-                ", host: " + getHost()+
+                ", host: " + getHost() +
                 " }";
     }
 }
