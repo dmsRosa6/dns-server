@@ -12,10 +12,11 @@ public class Main {
 
       System.out.println("Server started");
       Cache cache = new Cache();
+      ZoneStorage zStorage = new ZoneStorage();
 
       while (true) {
         try {
-          DnsServerOperations.handleQuery(socket, cache);
+          DnsServerOperations.handleQuery(socket, cache, zStorage);
 
         } catch (IOException e) {
           e.printStackTrace();

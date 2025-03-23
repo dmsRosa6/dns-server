@@ -6,16 +6,21 @@ import java.net.UnknownHostException;
 
 import dmsrosa.dns_server.BytePacketBuffer;
 
-class ARecord extends DnsRecord {
+public class ARecord extends DnsRecord {
     private final Inet4Address addr;
 
-    protected ARecord(String domain, Inet4Address addr, int ttl, QueryType c) {
+    public ARecord(String domain, Inet4Address addr, int ttl, QueryType c) {
         super(domain, ttl, c);
         this.addr = addr;
     }
 
-    protected ARecord(String domain, Inet4Address addr, int ttl) {
+    public ARecord(String domain, Inet4Address addr, int ttl) {
         super(domain, ttl, new QueryType.AQueryType());
+        this.addr = addr;
+    }
+
+    public ARecord(String domain, Inet4Address addr) {
+        super(domain, -1, new QueryType.AQueryType());
         this.addr = addr;
     }
 

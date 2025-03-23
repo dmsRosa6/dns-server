@@ -1,4 +1,5 @@
 dmsrosa/dns_server/Cache.class
+dmsrosa/dns_server/ZoneStorage.class
 dmsrosa/dns_server/messages/QueryType$OPTQueryType.class
 dmsrosa/dns_server/Cache$DomainEntry.class
 dmsrosa/dns_server/messages/DnsPacket.class
