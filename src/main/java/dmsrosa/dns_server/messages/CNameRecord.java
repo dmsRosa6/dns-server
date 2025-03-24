@@ -10,7 +10,7 @@ public class CNameRecord extends DnsRecord {
         this.host = host;
     }
 
-    protected CNameRecord(String domain, String host, int ttl) {
+    public CNameRecord(String domain, String host, int ttl) {
         super(domain, ttl, new QueryType.CNameQueryType());
         this.host = host;
     }

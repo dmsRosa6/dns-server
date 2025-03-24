@@ -14,6 +14,8 @@ public class Main {
       Cache cache = new Cache();
       ZoneStorage zStorage = new ZoneStorage();
 
+      new Controller(zStorage);
+
       while (true) {
         try {
           DnsServerOperations.handleQuery(socket, cache, zStorage);

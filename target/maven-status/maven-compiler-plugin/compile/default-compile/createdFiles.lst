@@ -4,6 +4,7 @@ dmsrosa/dns_server/messages/QueryType$OPTQueryType.class
 dmsrosa/dns_server/Cache$DomainEntry.class
 dmsrosa/dns_server/messages/DnsPacket.class
 dmsrosa/dns_server/Cache$RecordEntry.class
+dmsrosa/dns_server/Controller.class
 dmsrosa/dns_server/messages/QueryType$TXTQueryType.class
 dmsrosa/dns_server/messages/QueryType$AQueryType.class
 dmsrosa/dns_server/DnsServerOperations.class
@@ -24,6 +25,7 @@ dmsrosa/dns_server/messages/NSRecord.class
 dmsrosa/dns_server/messages/DnsRecord.class
 dmsrosa/dns_server/messages/ARecord.class
 dmsrosa/dns_server/messages/MXRecord.class
+dmsrosa/dns_server/Controller$DnsRecordDTO.class
 dmsrosa/dns_server/messages/AAAARecord.class
 dmsrosa/dns_server/messages/QueryType$NSQueryType.class
 dmsrosa/dns_server/messages/QueryType$CNameQueryType.class

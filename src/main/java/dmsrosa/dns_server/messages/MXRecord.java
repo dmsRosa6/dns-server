@@ -6,13 +6,13 @@ public class MXRecord extends DnsRecord {
     private final String host;
     private final short priority;
 
-    protected MXRecord(String domain, String host, short priority, int ttl, QueryType c) {
+    public MXRecord(String domain, String host, short priority, int ttl, QueryType c) {
         super(domain, ttl, c);
         this.host = host;
         this.priority = priority;
     }
 
-    protected MXRecord(String domain, String host, short priority, int ttl) {
+    public MXRecord(String domain, String host, short priority, int ttl) {
         super(domain, ttl, new QueryType.MXQueryType());
         this.host = host;
         this.priority = priority;

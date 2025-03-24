@@ -10,7 +10,7 @@ public class NSRecord extends DnsRecord {
         this.host = host;
     }
 
-    protected NSRecord(String domain, String host, int ttl) {
+    public NSRecord(String domain, String host, int ttl) {
         super(domain, ttl, new QueryType.NSQueryType());
         this.host = host;
     }

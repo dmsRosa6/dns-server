@@ -19,11 +19,6 @@ public class ARecord extends DnsRecord {
         this.addr = addr;
     }
 
-    public ARecord(String domain, Inet4Address addr) {
-        super(domain, -1, new QueryType.AQueryType());
-        this.addr = addr;
-    }
-
     public Inet4Address getAddr() {
         return addr;
     }

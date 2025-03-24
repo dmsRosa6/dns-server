@@ -14,7 +14,7 @@ public class AAAARecord extends DnsRecord {
         this.addr = addr;
     }
 
-    protected AAAARecord(String domain, Inet6Address addr, int ttl) {
+    public AAAARecord(String domain, Inet6Address addr, int ttl) {
         super(domain, ttl, new QueryType.AAAAQueryType());
         this.addr = addr;
     }

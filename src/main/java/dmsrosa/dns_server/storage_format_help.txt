@@ -1,0 +1,75 @@
+===============================================
+Zone Storage File Format (storage.txt)
+===============================================
+Each line in the file represents one DNS record and must follow this general format:
+
+   <record_type>:<domain>:<data>
+
+Where:
+  • <record_type> is the numeric DNS record type.
+  • <domain> is the domain name for the record.
+  • <data> contains the record-specific information.
+
+Supported record types and their expected formats:
+
+1. A Record (Type 1)
+   Format: 
+     1:example.com:192.0.2.1
+   Example:
+     1:www.rosa.com:192.168.1.100
+
+2. AAAA Record (Type 28)
+   Format:
+     28:example.com:2001:db8::1
+   Example:
+     28:www.rosa.com:2001:0db8:85a3:0000:0000:8a2e:0370:7334
+
+3. CNAME Record (Type 5)
+   Format:
+     5:alias.example.com:canonical.example.com
+   Example:
+     5:mail.rosa.com:mailserver.rosa.com
+
+4. MX Record (Type 15)
+   Format (data is "priority,mailServer"):
+     15:example.com:10,mail.example.com
+   Example:
+     15:rosa.com:5,mail.rosa.com
+
+5. NS Record (Type 2)
+   Format:
+     2:example.com:ns1.example.com
+   Example:
+     2:rosa.com:ns1.rosa.com
+
+6. OPT Record (Type 41)
+   Note: For OPT records, the domain field is not used. You may put a placeholder like "ignored".
+   Format:
+     41:ignored:optionData
+   Example:
+     41:ignored:extended-options
+
+7. SRV Record (Type 33)
+   Format (data is space-separated: "priority weight port target"):
+     33:service.example.com:10 5 5060 sipserver.example.com
+   Example:
+     33:_sip._udp.rosa.com:10 5 5060 sip.rosa.com
+
+8. SOA Record (Type 6)
+   Format (data is space-separated: "mname rname serial refresh retry expire minimum"):
+     6:example.com:ns1.example.com hostmaster.example.com 2020010101 3600 900 604800 86400
+   Example:
+     6:rosa.com:ns1.rosa.com hostmaster.rosa.com 2023041501 3600 900 604800 86400
+
+9. TXT Record (Type 16)
+   Format:
+     16:example.com:This is a text record.
+   Example:
+     16:rosa.com:Welcome to Rosa's DNS!
+
+Notes:
+  - Lines starting with '#' can be treated as comments and ignored.
+  - Ensure there are no extra spaces unless they are part of the record data.
+  - The TTL for records is set within your application (e.g., DEFAULT_TTL) if not specified per record.
+
+===============================================

@@ -15,7 +15,11 @@
     </properties>
 
     <dependencies>
-        <!-- JUnit 5 dependencies for testing -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin-bundle</artifactId>
+            <version>6.5.0</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -32,7 +36,6 @@
 
     <build>
         <plugins>
-            <!-- maven-jar-plugin: Create the jar with the main class entry -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

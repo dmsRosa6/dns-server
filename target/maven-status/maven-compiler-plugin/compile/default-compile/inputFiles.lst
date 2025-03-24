@@ -1,5 +1,6 @@
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/BytePacketBuffer.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/Cache.java
+/home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/Controller.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/DnsServerOperations.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/Main.java
 /home/dmsrosa/Desktop/dns-server/src/main/java/dmsrosa/dns_server/ZoneStorage.java
